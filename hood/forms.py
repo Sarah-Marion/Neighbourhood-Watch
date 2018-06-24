@@ -32,8 +32,25 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
-
+    """
+    class that creates an update profile form
+    """
     class Meta:
         model = User
         fields = ('email',)
+
+
+class NewPostForm(forms.ModelForm):
+    """
+    classs that creates a new post form
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['news_details'].widget.attrs['placeholder'] = 'Update your hood mates'
+        self.fields['news_footage'].widget.attrs['placeholder'] = ' Add footage'
+
+    class Meta:
+        model = News
+        fields = ('news_details', 'news_footage',)
+
 
