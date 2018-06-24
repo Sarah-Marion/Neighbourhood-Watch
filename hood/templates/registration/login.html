@@ -1,0 +1,22 @@
+{% extends 'registration/landing.html' %}
+
+{% block content %}
+  {{ block.super }}
+  <div class="wrapper">
+
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+
+        <br>
+        {{ field }}
+        {% for error in field.errors %}
+          <p class="alert alert-danger">{{ error }}</p>
+        {% endfor %}
+
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Log in</button>
+    </form>
+
+  </div>
+{% endblock %}

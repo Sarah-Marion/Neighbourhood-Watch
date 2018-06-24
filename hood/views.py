@@ -45,3 +45,25 @@ def signup(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
+def account_activation_sent(request):
+    current_user = request.user
+    if current_user.is_authenticated():
+        return HttpResponseRedirect('/')
+    return render(request, 'registration/activation_complete.html')
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.profile.email_confirmed = True
+        user.save()
+        login(request, user)
+        return redirect('logout')
+    else:
+        return render(request, 'registration/account_activation_invalid.html')

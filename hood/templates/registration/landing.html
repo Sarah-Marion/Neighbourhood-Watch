@@ -1,0 +1,42 @@
+{% load static %}
+{% load bootstrap3 %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% block styles %}
+      {% bootstrap_css %}
+      <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chewy">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% endblock %}
+  </head>
+  <body>
+    {% block content %}
+      <header>
+        <div class="container">
+          <div class="col-md-2 col-md-offset-4 col-xs-8 col-xs-offset-2">
+            <a href="{% url 'signup' %}">
+              <button class="btn btn-primary btn-block" type="button">Sign-Up</button>
+            </a>
+          </div>
+          <div class="col-lg-offset-0 col-md-2 col-md-offset-0 col-sm-offset-2 col-xs-8 col-xs-offset-2">
+            <a href="{% url 'login' %}">
+              <button class="btn btn-danger btn-block" type="button">Login</button>
+            </a>
+          </div>
+        </div>
+      </header>
+    {% endblock %}
+
+    {% block scripts %}
+      <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAjT5RSv8RGaxktrIJYOLLPmU-SwjqnGvk&libraries=places"></script>
+      <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'js/jquery.geocomplete.min.js' %}"></script>
+      <script src="{% static 'js/app.js' %}"></script>
+      {% bootstrap_javascript %}
+    {% endblock %}
+  </body>
+</html>
