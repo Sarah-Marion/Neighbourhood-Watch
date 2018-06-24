@@ -39,6 +39,11 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = ('/login')
+ACCOUNT_ACTIVATION_DAYS = 7
+
+# GOOGLE_API = config('GOOGLE_API')
+# GEOCODE_URL = config('GEOCODE_URL')
 
 
 # Application definition
@@ -51,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'hood'
 ]
 
 MIDDLEWARE = [
