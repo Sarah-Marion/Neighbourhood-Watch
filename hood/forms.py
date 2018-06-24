@@ -29,3 +29,11 @@ class LoginForm(AuthenticationForm):
     """
     username = forms.CharField(widget=TextInput(attrs={'class':'validate', 'placeholder':'Username'}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Password'}))
+
+
+class ProfileUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('email',)
+
