@@ -54,3 +54,28 @@ class NewPostForm(forms.ModelForm):
         fields = ('news_details', 'news_footage',)
 
 
+class HoodForm(forms.ModelForm):
+    class Meta:
+        model = Hood
+        fields = ('hood_location', 'hood_name')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['hood_name'] = forms.ChoiceField(
+            choices=[]
+        )
+        self.fields['hood_name'].required = True
+
+
+class BusinessForm(forms.ModelForm):
+    class Meta:
+        model = Business
+        fields = ('business_name', 'business_email', 'business_category', 'business_description')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['business_name'].widget.attrs['placeholder'] = ' Business Name'
+        self.fields['business_email'].widget.attrs['placeholder'] = ' Business Email'
+        self.fields['business_description'].widget.attrs['placeholder'] = ' Short Business Description'
+
+
