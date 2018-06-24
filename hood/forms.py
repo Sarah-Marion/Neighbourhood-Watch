@@ -23,3 +23,9 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', '1st_password', '2nd_password')
         unique_together = ('email',)
 
+class LoginForm(AuthenticationForm):
+    """
+    classs that creates a Login form
+    """
+    username = forms.CharField(widget=TextInput(attrs={'class':'validate', 'placeholder':'Username'}))
+    password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Password'}))
