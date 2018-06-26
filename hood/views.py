@@ -183,3 +183,26 @@ def profile(request):
     return render(request, 'profile.html', {'profile_data': profile_details, "formset": formset, 'updated_user': update_form})
 
 
+
+@login_required
+def new_location(request):
+
+    if request.method == 'POST' and 'hood-name' in request.POST:
+        hood_name = request.POST.get('hood-name')
+        hood_location = request.POST.get('hood-location')
+
+        user_profile = Profile.objects.get(id=request.user.id)
+
+        new_location = Location(loc_name=hood_location)
+        new_location.save()
+
+        new_hood = Hood(hood_name=hood_name, hood_location=new_location, hood_admin=user_profile)
+        new_hood.save()
+
+        user_profile.update_profile_hood(user_profile.id, new_hood)
+
+        return redirect('profile')
+
+    return render(request, 'hood/new-location.html')
+
+
