@@ -226,3 +226,16 @@ def new_business(request):
     return render(request, 'business/new-business.html', {'form': form})
 
 
+@login_required
+@user_belongs_to_hood
+def update_business(request, business_id):
+    if request.method == 'POST':
+        instance = get_object_or_404(Business, id=business_id)
+        form = BusinessForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Business updated successfully')
+    return redirect(manage_business)
+
+
+
