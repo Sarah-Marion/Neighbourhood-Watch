@@ -131,3 +131,24 @@ def index(request):
     hood_news = News.objects.filter(news_hood=hood_instance)
 
     return render(request, 'index.html', {'hood_news': hood_news,  'police': nearby_police_results, 'hospitals': nearby_hospital_results})
+
+
+@login_required
+def post(request):
+    profile_instance = Profile.objects.get(id=request.user.id)
+    place = profile_instance.profile_hood.pk
+    place = Hood.objects.get(id=place)
+
+    if request.method == 'POST':
+        form = NewPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            news = form.save(commit=False)
+            news.news_created_by = profile_instance
+            news.news_hood = place
+            news.save()
+        return redirect(index)
+    else:
+        form = NewPostForm()
+
+    return render(request, 'hood/news.html', {"form": form})
+
