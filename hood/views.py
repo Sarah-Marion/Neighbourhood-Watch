@@ -238,4 +238,21 @@ def update_business(request, business_id):
     return redirect(manage_business)
 
 
+@login_required
+@user_belongs_to_hood
+def manage_business(request):
+    profile_instance = Profile.find_profile_by_userid(request.user.id)
+    businesses = Business.objects.filter(business_owner=profile_instance).all()
+    return render(request, 'business/manage-business.html', {'businesses': businesses})
+
+
+@login_required
+@user_belongs_to_hood
+def all_business(request):
+    profile_instance = Profile.objects.get(id=request.user.id)
+    hood_instance = Hood.objects.filter(hood_name=profile_instance.profile_hood.hood_name)
+
+    business = Business.objects.filter(business_hood=hood_instance)
+    return render(request, 'business/view-business.html', {'businesses': business})
+
 
