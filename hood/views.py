@@ -278,5 +278,21 @@ def check_location_exists(request):
         return HttpResponse(status, content_type='application/json')
 
 
+@login_required
+def retrieve_business_info(request):
+    if request.method == "GET" and 'business_id' in request.GET and request.is_ajax():
+        business_pk = request.GET.get('business_id')
+        found_bs = Business.objects.get(id=business_pk)
+
+        form = BusinessForm(initial={'business_name': found_bs.business_name, 'business_email': found_bs.business_email,
+                                     'business_category': found_bs.business_category, 'business_description': found_bs.business_description})
+        return render(request, 'business/retrive-business.html', {'form': form, 'bs_id': business_pk})
+
+    if request.method == "GET" and 'b_id' in request.GET and request.is_ajax():
+        business_pk = request.GET.get('b_id')
+        Business.objects.filter(id=business_pk).delete()
+        status = 'deleted'
+        return redirect(manage_business)
+
 
 
