@@ -98,3 +98,36 @@ def load_hood(request):
         hoods = Hood.objects.filter(hood_location=location_id)
     return render(request, 'hood/hood_dropdown.html', {'hoods': hoods})
 
+
+@login_required
+@user_belongs_to_hood
+def index(request):
+
+    google_key = settings.GOOGLE_API
+    geocode_url = settings.GEOCODE_URL
+    gmaps = Client(key=google_key)
+
+    profile_instance = Profile.objects.get(id=request.user.id)
+    hood_instance = Hood.objects.filter(hood_name=profile_instance.profile_hood.hood_name)
+
+    place = profile_instance.profile_hood.hood_location.loc_name
+
+    place = place.strip().replace(" ", "+")
+    response = requests.get(geocode_url.format(place, google_key))
+
+    general_address = response.json()
+    address = general_address['results'][0]['geometry']['location']
+
+
+    nearby_police_results = gmaps.places_nearby(location=address, keyword='police',
+                                                language='en-US', open_now=True,
+                                                rank_by='distance', type='police')
+
+    nearby_hospital_results = gmaps.places_nearby(location=address, keyword='hospital',
+                                                  language='en-US', open_now=True,
+                                                  rank_by='distance', type='hospital')
+
+
+    hood_news = News.objects.filter(news_hood=hood_instance)
+
+    return render(request, 'index.html', {'hood_news': hood_news,  'police': nearby_police_results, 'hospitals': nearby_hospital_results})
