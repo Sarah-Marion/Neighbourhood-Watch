@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from .forms import *
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, NewPostForm, HoodForm
 import json
 import requests
-from .models import *
+from .models import Profile, Hood, Location, Business, News
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
 from django.contrib.auth import login
@@ -22,8 +22,8 @@ from .decorators import user_belongs_to_hood
 # Create your views here.
 def signup(request):
     current_user = request.user
-    if current_user.is_authenticated():
-        return HttpResponseRedirect('/')
+    # if current_user.is_authenticated():
+    #     return HttpResponseRedirect('/')
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -67,3 +67,26 @@ def activate(request, uidb64, token):
         return redirect('logout')
     else:
         return render(request, 'registration/account_activation_invalid.html')
+
+
+@login_required
+def select_hood(request):
+    form = HoodForm()
+    user = Profile.objects.get(profile_owner=request.user)
+    user_has_hood = user.profile_hood
+
+    if request.method == 'POST' and 'hood_name' in request.POST is not None:
+
+        form = HoodForm(request.POST)
+        location_id = request.POST.get('hood_location')
+        hood_id = request.POST.get('hood_name')
+
+        hood = Hood.objects.get(id=hood_id)
+
+        user.profile_hood = hood
+        user.save()
+
+        return redirect(index)
+
+    return render(request, 'hood/select-hood.html', {'form': form, 'user_has_hood': user_has_hood})
+
