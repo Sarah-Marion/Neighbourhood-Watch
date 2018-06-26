@@ -206,3 +206,23 @@ def new_location(request):
     return render(request, 'hood/new-location.html')
 
 
+@login_required
+@user_belongs_to_hood
+def new_business(request):
+    if request.method == 'POST':
+        form = BusinessForm(request.POST)
+        profile_instance = Profile.find_profile_by_userid(request.user.id)
+        profile_instance_hood = profile_instance.profile_hood
+        if form.is_valid():
+            new_bs = form.save(commit=False)
+            new_bs.business_owner = profile_instance
+            new_bs.business_hood = profile_instance_hood
+            new_bs.save()
+            messages.success(request, 'Business Added successfully')
+            return redirect(manage_business)
+    else:
+        form = BusinessForm()
+
+    return render(request, 'business/new-business.html', {'form': form})
+
+
