@@ -90,3 +90,11 @@ def select_hood(request):
 
     return render(request, 'hood/select-hood.html', {'form': form, 'user_has_hood': user_has_hood})
 
+
+@login_required
+def load_hood(request):
+    if request.method == "GET" and 'hood_location' in request.GET and request.is_ajax():
+        location_id = request.GET.get('hood_location')
+        hoods = Hood.objects.filter(hood_location=location_id)
+    return render(request, 'hood/hood_dropdown.html', {'hoods': hoods})
+
