@@ -256,3 +256,27 @@ def all_business(request):
     return render(request, 'business/view-business.html', {'businesses': business})
 
 
+@login_required
+def check_location_exists(request):
+    if request.method == 'POST' and request.is_ajax():
+        set_hood = request.POST.get('hood-name').strip()
+        location_exists = Hood.objects.filter(hood_name__iexact=set_hood).all()
+        user_profile = Profile.find_profile_by_userid(request.user.id)
+        user_is_hood_admin = Hood.objects.filter(hood_admin=user_profile)
+
+        if location_exists:
+            status = 'exists'
+
+        if not location_exists:
+            status = 'not exist'
+
+        if user_is_hood_admin:
+            status = 'admin'
+
+        status = json.dumps(status)
+
+        return HttpResponse(status, content_type='application/json')
+
+
+
+
