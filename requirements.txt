@@ -6,7 +6,7 @@ django-bootstrap3==10.0.1
 django-heroku==0.3.1
 django-tinymce==2.7.0
 gunicorn==19.8.1
-idna==2.7
+idna==3.1
 Pillow==5.1.0
 pkg-resources==0.0.0
 psycopg2==2.7.5
