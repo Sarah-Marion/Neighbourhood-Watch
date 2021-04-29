@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "02:00"
+    timezone: Africa/Nairobi
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: pytz
+    versions:
+    - "2020.5"
+  - dependency-name: django-tinymce
+    versions:
+    - 3.2.0
+  - dependency-name: django-bootstrap3
+    versions:
+    - 14.2.0
+  - dependency-name: gunicorn
+    versions:
+    - 20.0.4
