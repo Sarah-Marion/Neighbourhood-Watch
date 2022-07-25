@@ -13,5 +13,5 @@ psycopg2==2.7.5
 python-decouple==3.1
 pytz==2021.1
 requests==2.19.1
-urllib3==1.26.5
+urllib3==1.26.11
 whitenoise==5.3.0
